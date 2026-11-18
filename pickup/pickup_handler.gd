@@ -7,6 +7,9 @@ extends Area3D
 # for selecting the closest one and allowing pickup
 # of that object.
 
+# Scene instantiated when the fist gesture is made with nothing in range.
+@export var magic_body_scene : PackedScene = preload("res://objects/box.tscn")
+
 # Detect range specifies within what radius we detect
 # objects we can pick up.
 @export var detect_range : float = 0.3:
@@ -24,6 +27,21 @@ var closest_body : PickupAbleBody3D
 var picked_up_body: PickupAbleBody3D
 var was_pickup_pressed : bool = false
 
+# Creates a new pickable body at our position and returns it.
+func _spawn_magic_body() -> PickupAbleBody3D:
+	if not magic_body_scene:
+		return null
+
+	var body := magic_body_scene.instantiate() as PickupAbleBody3D
+	if not body:
+		push_warning("PickupHandler: magic_body_scene must use PickupAbleBody3D")
+		return null
+
+	# It needs a parent first, because pick_up() remembers it
+	# as the original parent and re-attaches the body there on release.
+	get_tree().current_scene.add_child(body)
+	body.global_transform = global_transform
+	return body
 
 # Update our detection range.
 func _update_detect_range() -> void:
@@ -90,6 +108,8 @@ func _ready() -> void:
 
 # Called every physics frame
 func _physics_process(delta) -> void:
+	if Engine.is_editor_hint():
+		return
 	# As we move our hands we need to check if the closest body
 	# has changed.
 	_update_closest_body()
@@ -110,10 +130,16 @@ func _physics_process(delta) -> void:
 		picked_up_body.let_go()
 		picked_up_body = null
 
-	# Do we need to pick something up
-	if not picked_up_body and not was_pickup_pressed and pickup_pressed and closest_body:
-		picked_up_body = closest_body
-		picked_up_body.pick_up(self)
+		# Do we need to pick something up
+	if not picked_up_body and not was_pickup_pressed and pickup_pressed:
+		var body : PickupAbleBody3D = closest_body
+		if not body:
+			# Nothing in range: make a cube appear in our hand.
+			body = _spawn_magic_body()
+
+		if body:
+			picked_up_body = body
+			picked_up_body.pick_up(self)
 
 	# Remember our state for the next frame
 	was_pickup_pressed = pickup_pressed

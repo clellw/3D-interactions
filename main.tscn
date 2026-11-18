@@ -7,8 +7,6 @@
 [ext_resource type="Texture2D" uid="uid://dgbymd1aiyghq" path="res://assets/images/pattern.png" id="4_3x0ea"]
 [ext_resource type="PackedScene" uid="uid://b4ebsfoqnxu81" path="res://hand_info.tscn" id="5_wlhtu"]
 [ext_resource type="Script" uid="uid://bl113ujd2uagj" path="res://hand_controller.gd" id="6_e5cto"]
-[ext_resource type="PackedScene" uid="uid://daig77dk5yvhx" path="res://objects/table.tscn" id="6_rfmma"]
-[ext_resource type="PackedScene" uid="uid://b37oxqwt8r28" path="res://objects/box.tscn" id="7_6sqt7"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
 
@@ -68,27 +66,6 @@ In SteamVR, open the menu and
 select recenter and follow
 instructions"
 
-[node name="Table" parent="." unique_id=1938310904 instance=ExtResource("6_rfmma")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.5)
-
-[node name="Box01" parent="Table" unique_id=607964254 instance=ExtResource("7_6sqt7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.941084, 0)
-
-[node name="Box02" parent="Table" unique_id=1677557311 instance=ExtResource("7_6sqt7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13752, 0.941084, 0)
-
-[node name="Box03" parent="Table" unique_id=77250749 instance=ExtResource("7_6sqt7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0746718, 1.06282, 0)
-
-[node name="LeftHandInfo" parent="Table" unique_id=1760315995 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
-transform = Transform3D(0.939693, -0.085635, 0.331126, 0, 0.968147, 0.25038, -0.34202, -0.23528, 0.909761, -0.713026, 0.8718, -0.309953)
-fallback_mesh = NodePath("../../XROrigin3D/LeftHandController/FullbackMesh")
-
-[node name="RightHandInfo" parent="Table" unique_id=166019423 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
-transform = Transform3D(0.939693, 0.085635, -0.331126, 0, 0.968147, 0.25038, 0.34202, -0.23528, 0.909761, 0.278022, 0.8718, -0.381943)
-hand = 1
-fallback_mesh = NodePath("../../XROrigin3D/RightHandController/FullbackMesh")
-
 [node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=1143024626]
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=1264073145]
@@ -128,9 +105,9 @@ script = ExtResource("7_yj2fr")
 
 [node name="LeftHandHumanoid2" parent="XROrigin3D/LeftHandMesh" unique_id=1103021127 instance=ExtResource("2_3hxem")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 340644334) index="1" unique_id=1973581196]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 1327969339) index="1" unique_id=1973581196]
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 340644334) index="2" unique_id=554109447]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 1327969339) index="2" unique_id=554109447]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -158,10 +135,10 @@ hand = 1
 
 [node name="RightHandHumanoid2" parent="XROrigin3D/RightHandMesh" unique_id=90653821 instance=ExtResource("3_oifi1")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1894149692) index="1" unique_id=1677190653]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 132411664) index="1" unique_id=1677190653]
 hand_tracker = &"/user/hand_tracker/right"
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1894149692) index="2" unique_id=1145812469]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 132411664) index="2" unique_id=1145812469]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -180,6 +157,15 @@ active = true
 influence = 1.0
 script = ExtResource("8_gdsnk")
 grip_action = "pickup"
+
+[node name="LeftHandInfo" parent="." unique_id=1760315995 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
+transform = Transform3D(0.939693, -0.085635, 0.331126, 0, 0.968147, 0.25038, -0.34202, -0.23528, 0.909761, -0.713026, 0.8718, -0.809953)
+fallback_mesh = NodePath("../XROrigin3D/LeftHandController/FullbackMesh")
+
+[node name="RightHandInfo" parent="." unique_id=166019423 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
+transform = Transform3D(0.939693, 0.085635, -0.331126, 0, 0.968147, 0.25038, 0.34202, -0.23528, 0.909761, 0.278022, 0.8718, -0.881943)
+hand = 1
+fallback_mesh = NodePath("../XROrigin3D/RightHandController/FullbackMesh")
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
