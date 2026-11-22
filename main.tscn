@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b37oxqwt8r28" path="res://objects/box.tscn" id="7_6sqt7"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
+[ext_resource type="PackedScene" uid="uid://bbc70rpnirw66" path="res://blow_magic.tscn" id="12_dg77c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -128,9 +129,9 @@ script = ExtResource("7_yj2fr")
 
 [node name="LeftHandHumanoid2" parent="XROrigin3D/LeftHandMesh" unique_id=1103021127 instance=ExtResource("2_3hxem")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 340644334) index="1" unique_id=1973581196]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 2073369260) index="1" unique_id=1973581196]
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 340644334) index="2" unique_id=554109447]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 2073369260) index="2" unique_id=554109447]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -158,10 +159,10 @@ hand = 1
 
 [node name="RightHandHumanoid2" parent="XROrigin3D/RightHandMesh" unique_id=90653821 instance=ExtResource("3_oifi1")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1894149692) index="1" unique_id=1677190653]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 86910651) index="1" unique_id=1677190653]
 hand_tracker = &"/user/hand_tracker/right"
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1894149692) index="2" unique_id=1145812469]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 86910651) index="2" unique_id=1145812469]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -180,6 +181,9 @@ active = true
 influence = 1.0
 script = ExtResource("8_gdsnk")
 grip_action = "pickup"
+
+[node name="BlowMagic" parent="." unique_id=1901747355 node_paths=PackedStringArray("xr_camera") instance=ExtResource("12_dg77c")]
+xr_camera = NodePath("../XROrigin3D/XRCamera3D")
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
