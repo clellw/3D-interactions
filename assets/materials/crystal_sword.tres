@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dd47f4hwlk7ia"]
+
+[ext_resource type="Shader" uid="uid://bqwux53w5g5aq" path="res://assets/materials/crystal_sword.gdshader" id="1_k7dey"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_k7dey")
