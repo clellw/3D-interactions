@@ -8,7 +8,7 @@ extends Area3D
 # of that object.
 
 # Scene instantiated when the fist gesture is made with nothing in range.
-@export var magic_body_scene : PackedScene = preload("res://objects/box.tscn")
+@export var magic_body_scene : PackedScene = preload("res://objects/sword.tscn")
 
 # Detect range specifies within what radius we detect
 # objects we can pick up.
