@@ -23,9 +23,32 @@ extends Area3D
 # action map that triggers our pickup function.
 @export var pickup_action : String = "pickup"
 
+# A finger counts as curled when its straightness is below this value.
+# Straightness = (distance from finger base to tip) / (finger length measured
+# bone by bone): ~1.0 for a straight finger, ~0.4 for a fully curled one.
+# All 4 fingers (index, middle, ring, pinky) must be curled to spawn the sword.
+@export_range(0.3, 1.0) var fist_curl_threshold : float = 0.6
+
 var closest_body : PickupAbleBody3D
 var picked_up_body: PickupAbleBody3D
 var was_pickup_pressed : bool = false
+# Pickup pressed with nothing in range: we spawn as soon as the fist is full.
+var waiting_for_fist : bool = false
+
+const FINGER_CHAINS := [
+	[ XRHandTracker.HAND_JOINT_INDEX_FINGER_METACARPAL, XRHandTracker.HAND_JOINT_INDEX_FINGER_PHALANX_PROXIMAL,
+	  XRHandTracker.HAND_JOINT_INDEX_FINGER_PHALANX_INTERMEDIATE, XRHandTracker.HAND_JOINT_INDEX_FINGER_PHALANX_DISTAL,
+	  XRHandTracker.HAND_JOINT_INDEX_FINGER_TIP ],
+	[ XRHandTracker.HAND_JOINT_MIDDLE_FINGER_METACARPAL, XRHandTracker.HAND_JOINT_MIDDLE_FINGER_PHALANX_PROXIMAL,
+	  XRHandTracker.HAND_JOINT_MIDDLE_FINGER_PHALANX_INTERMEDIATE, XRHandTracker.HAND_JOINT_MIDDLE_FINGER_PHALANX_DISTAL,
+	  XRHandTracker.HAND_JOINT_MIDDLE_FINGER_TIP ],
+	[ XRHandTracker.HAND_JOINT_RING_FINGER_METACARPAL, XRHandTracker.HAND_JOINT_RING_FINGER_PHALANX_PROXIMAL,
+	  XRHandTracker.HAND_JOINT_RING_FINGER_PHALANX_INTERMEDIATE, XRHandTracker.HAND_JOINT_RING_FINGER_PHALANX_DISTAL,
+	  XRHandTracker.HAND_JOINT_RING_FINGER_TIP ],
+	[ XRHandTracker.HAND_JOINT_PINKY_FINGER_METACARPAL, XRHandTracker.HAND_JOINT_PINKY_FINGER_PHALANX_PROXIMAL,
+	  XRHandTracker.HAND_JOINT_PINKY_FINGER_PHALANX_INTERMEDIATE, XRHandTracker.HAND_JOINT_PINKY_FINGER_PHALANX_DISTAL,
+	  XRHandTracker.HAND_JOINT_PINKY_FINGER_TIP ],
+]
 
 # Creates a new pickable body at our position and returns it.
 func _spawn_magic_body() -> PickupAbleBody3D:
@@ -100,8 +123,74 @@ func _get_parent_controller() -> XRController3D:
 	return null
 
 
+# True if the hand holding this handler is making a full fist (index, middle,
+# ring and pinky all curled), based on hand tracking joints.
+# Without hand tracking data (e.g. holding controllers) there are no finger
+# joints to check, so we return true and the pickup action alone decides.
+func _is_full_fist() -> bool:
+	var controller : XRController3D = _get_parent_controller()
+	if not controller:
+		return true
+
+	var tracker_name : StringName
+	if controller.tracker == &"left_hand":
+		tracker_name = &"/user/hand_tracker/left"
+	elif controller.tracker == &"right_hand":
+		tracker_name = &"/user/hand_tracker/right"
+	else:
+		return true
+
+	var hand_tracker : XRHandTracker = XRServer.get_tracker(tracker_name)
+	if not hand_tracker or not hand_tracker.has_tracking_data:
+		return true
+
+	for chain in FINGER_CHAINS:
+		var path_length : float = 0.0
+		var previous : Vector3
+		for i in chain.size():
+			var joint : XRHandTracker.HandJoint = chain[i]
+			if not (hand_tracker.get_hand_joint_flags(joint) & XRHandTracker.HAND_JOINT_FLAG_POSITION_VALID):
+				return false # can't see this finger: don't spawn yet
+			var joint_pos : Vector3 = hand_tracker.get_hand_joint_transform(joint).origin
+			if i > 0:
+				path_length += previous.distance_to(joint_pos)
+			previous = joint_pos
+
+		var base : Vector3 = hand_tracker.get_hand_joint_transform(chain[0]).origin
+		var straightness : float = base.distance_to(previous) / max(path_length, 0.0001)
+		if straightness > fist_curl_threshold:
+			return false # this finger isn't curled enough
+
+	return true
+
+
+# 0 = left hand, 1 = right hand, -1 = unknown (from our parent controller).
+func get_hand_index() -> int:
+	var controller : XRController3D = _get_parent_controller()
+	if not controller:
+		return -1
+	if controller.tracker == &"left_hand":
+		return 0
+	if controller.tracker == &"right_hand":
+		return 1
+	return -1
+
+
+# True if the finger snap detector of our hand currently has a fireball
+# (see gestures/finger_snap_detector.gd).
+func _hand_has_orb() -> bool:
+	var hand_index : int = get_hand_index()
+	for detector in get_tree().get_nodes_in_group(&"finger_snap_detectors"):
+		if detector.hand == hand_index and detector.has_active_orb():
+			return true
+	return false
+
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		# Lets the finger snap detectors find us.
+		add_to_group(&"pickup_handlers")
 	_update_detect_range()
 	_update_closest_body()
 
@@ -130,16 +219,35 @@ func _physics_process(delta) -> void:
 		picked_up_body.let_go()
 		picked_up_body = null
 
-		# Do we need to pick something up
-	if not picked_up_body and not was_pickup_pressed and pickup_pressed:
-		var body : PickupAbleBody3D = closest_body
-		if not body:
-			# Nothing in range: make a cube appear in our hand.
-			body = _spawn_magic_body()
+	# Do we need to pick something up?
+	if not picked_up_body and pickup_pressed:
+		if not was_pickup_pressed:
+			# Just pressed: grab what is in range, or wait for a full fist
+			# to spawn the sword.
+			if closest_body:
+				picked_up_body = closest_body
+				picked_up_body.pick_up(self)
+			else:
+				# Not while a fireball is on this hand: closing the fist then
+				# crushes the fireball instead of spawning the sword.
+				waiting_for_fist = not _hand_has_orb()
 
-		if body:
-			picked_up_body = body
-			picked_up_body.pick_up(self)
+		# The headset may report "pickup" as soon as one finger curls, so we
+		# only spawn once all four fingers are actually curled. This is checked
+		# every frame while pickup is held, so closing the fist slowly works.
+		# A fireball appeared on this hand meanwhile (snap): don't spawn.
+		if waiting_for_fist and _hand_has_orb():
+			waiting_for_fist = false
+
+		if waiting_for_fist and _is_full_fist():
+			waiting_for_fist = false
+			var body : PickupAbleBody3D = _spawn_magic_body()
+			if body:
+				picked_up_body = body
+				picked_up_body.pick_up(self)
+
+	if not pickup_pressed:
+		waiting_for_fist = false
 
 	# Remember our state for the next frame
 	was_pickup_pressed = pickup_pressed

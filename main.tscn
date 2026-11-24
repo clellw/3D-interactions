@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://bl113ujd2uagj" path="res://hand_controller.gd" id="6_e5cto"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
+[ext_resource type="Script" path="res://gestures/finger_snap_detector.gd" id="9_snap"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -105,9 +106,9 @@ script = ExtResource("7_yj2fr")
 
 [node name="LeftHandHumanoid2" parent="XROrigin3D/LeftHandMesh" unique_id=1103021127 instance=ExtResource("2_3hxem")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 1327969339) index="1" unique_id=1973581196]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 2104092859) index="1" unique_id=1973581196]
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 1327969339) index="2" unique_id=554109447]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/LeftHandMesh/LeftHandHumanoid2/LeftHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(1103021127, 2104092859) index="2" unique_id=554109447]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -135,10 +136,10 @@ hand = 1
 
 [node name="RightHandHumanoid2" parent="XROrigin3D/RightHandMesh" unique_id=90653821 instance=ExtResource("3_oifi1")]
 
-[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 132411664) index="1" unique_id=1677190653]
+[node name="XRHandModifier3D" type="XRHandModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1448953082) index="1" unique_id=1677190653]
 hand_tracker = &"/user/hand_tracker/right"
 
-[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 132411664) index="2" unique_id=1145812469]
+[node name="XRHandFallbackModifier3D" type="SkeletonModifier3D" parent="XROrigin3D/RightHandMesh/RightHandHumanoid2/RightHandHumanoid/Skeleton3D" parent_id_path=PackedInt32Array(90653821, 1448953082) index="2" unique_id=1145812469]
 unique_name_in_owner = false
 process_mode = 0
 process_priority = 0
@@ -166,6 +167,29 @@ fallback_mesh = NodePath("../XROrigin3D/LeftHandController/FullbackMesh")
 transform = Transform3D(0.939693, 0.085635, -0.331126, 0, 0.968147, 0.25038, 0.34202, -0.23528, 0.909761, 0.278022, 0.8718, -0.881943)
 hand = 1
 fallback_mesh = NodePath("../XROrigin3D/RightHandController/FullbackMesh")
+
+[node name="LeftSnapInfo" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.3, -0.9)
+pixel_size = 0.0015
+text = "Left hand - finger snap"
+horizontal_alignment = 0
+vertical_alignment = 2
+
+[node name="RightSnapInfo" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.3, -0.9)
+pixel_size = 0.0015
+text = "Right hand - finger snap"
+horizontal_alignment = 0
+vertical_alignment = 2
+
+[node name="LeftSnapDetector" type="Node3D" parent="XROrigin3D" node_paths=PackedStringArray("debug_label")]
+script = ExtResource("9_snap")
+debug_label = NodePath("../../LeftSnapInfo")
+
+[node name="RightSnapDetector" type="Node3D" parent="XROrigin3D" node_paths=PackedStringArray("debug_label")]
+script = ExtResource("9_snap")
+hand = 1
+debug_label = NodePath("../../RightSnapInfo")
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
