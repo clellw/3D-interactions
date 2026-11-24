@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://ny74d8kiffr3"]
+
+[ext_resource type="PackedScene" uid="uid://bdpih0o5eijqw" path="res://assets/gltf/mannequin.glb" id="1_75dar"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_wxr5f"]
+
+[node name="Mannequin" type="Node3D" unique_id=48309245]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1958531019]
+mesh = SubResource("ArrayMesh_wxr5f")
+
+[node name="mannequin" parent="MeshInstance3D" unique_id=108350939 instance=ExtResource("1_75dar")]
