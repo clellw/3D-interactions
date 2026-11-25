@@ -2,9 +2,9 @@
 
 [ext_resource type="PackedScene" uid="uid://3gjkc6qju2n3" path="res://assets/gltf/LeftHandHumanoid.gltf" id="2_3hxem"]
 [ext_resource type="Script" uid="uid://dmwdpfwh7uxw" path="res://start_vr.gd" id="2_5rtkn"]
+[ext_resource type="Material" uid="uid://5ewi60av7op7" path="res://assets/materials/floor_wood.tres" id="2_kek77"]
 [ext_resource type="PackedScene" uid="uid://bymg1qpy1tu2w" path="res://assets/gltf/RightHandHumanoid.gltf" id="3_oifi1"]
 [ext_resource type="PackedScene" uid="uid://caospno4tdf1p" path="res://pickup/pickup_handler.tscn" id="3_sg1io"]
-[ext_resource type="Texture2D" uid="uid://dgbymd1aiyghq" path="res://assets/images/pattern.png" id="4_3x0ea"]
 [ext_resource type="PackedScene" uid="uid://b4ebsfoqnxu81" path="res://hand_info.tscn" id="5_wlhtu"]
 [ext_resource type="Script" uid="uid://bl113ujd2uagj" path="res://hand_controller.gd" id="6_e5cto"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
@@ -23,13 +23,8 @@ background_mode = 2
 sky = SubResource("Sky_tsis2")
 tonemap_mode = 4
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dxr1t"]
-albedo_color = Color(0.187808, 0.607643, 0.279312, 1)
-albedo_texture = ExtResource("4_3x0ea")
-uv1_scale = Vector3(100, 100, 100)
-
 [sub_resource type="PlaneMesh" id="PlaneMesh_6hhse"]
-material = SubResource("StandardMaterial3D_dxr1t")
+material = ExtResource("2_kek77")
 size = Vector2(1000, 1000)
 subdivide_width = 10
 subdivide_depth = 10

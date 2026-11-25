@@ -1,0 +1,18 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://cmmfmas3gxo64"]
+
+[ext_resource type="Shader" uid="uid://58hr65gs5n1j" path="res://assets/materials/metal_powder_coated.gdshader" id="1_idomg"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_idomg")
+shader_parameter/color_1 = Vector3(0.318555, 0.318555, 0.318555)
+shader_parameter/color_2 = Vector3(0, 0, 0)
+shader_parameter/reflection_color = Vector3(0.123227, 0.123227, 0.123227)
+shader_parameter/reflection_blend = 0.4295
+shader_parameter/global_scale = 1.0
+shader_parameter/aspect_ratio = Vector3(1, 1, 1)
+shader_parameter/roughness_value = 0.25
+shader_parameter/falloff_strength = 0.2
+shader_parameter/bump_strength = 0.575
+shader_parameter/bump_distance = 0.01
+shader_parameter/flake_mix = 0.4
