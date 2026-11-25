@@ -8,6 +8,121 @@ var closest_areas : Array
 var original_parent : Node3D
 var tween : Tween
 
+# ---- Throwing ----------------------------------------------------------------
+# While held, the object is frozen and simply follows the hand, so the physics
+# engine doesn't know how fast it moves. We record where it was during the
+# last frames, and when it is released we give it that speed and spin, so it
+# can be thrown (and caught again, e.g. to juggle).
+
+## Multiplies the throw speed (1 = exactly the hand speed). A little more
+## than 1 feels better in VR since there's no weight in your hand.
+@export var throw_strength : float = 1.2
+## Multiplies the spin given when throwing.
+@export var throw_spin_strength : float = 1.0
+## The hand speed is measured over stretches of this duration (seconds).
+## Longer = smoother but less precise. Hand tracking jitters, so not too short.
+@export var throw_sample_time : float = 0.06
+## When releasing, we look back this far for the FASTEST stretch of movement.
+## The release is detected a little after the throw itself, when the hand is
+## already slowing down; using the peak speed compensates for that delay.
+@export var throw_search_time : float = 0.2
+## Maximum throw speed in m/s (avoids crazy throws from a tracking glitch).
+@export var max_throw_speed : float = 15.0
+
+var _motion_samples : Array = []   # [ [time, global transform], ... ] while held
+var _centre_local : Vector3        # approximate centre of mass, local space
+
+
+func _ready() -> void:
+	# We track the speed of the centre of mass (not of the origin, which for
+	# the sword is at the bottom of the handle) so throws behave correctly
+	# when spinning. If the scene sets a custom centre of mass, use it...
+	if center_of_mass_mode == RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM:
+		_centre_local = center_of_mass
+		return
+
+	# ...otherwise approximate it: average position of our collision shapes.
+	var count : int = 0
+	for child in get_children():
+		if child is CollisionShape3D:
+			_centre_local += child.position
+			count += 1
+	if count > 0:
+		_centre_local /= count
+
+
+func _physics_process(_delta : float) -> void:
+	if not picked_up_by:
+		return
+	var now : float = Time.get_ticks_msec() / 1000.0
+	_motion_samples.append([ now, global_transform ])
+	# Keep a little more than the window we need.
+	while _motion_samples.size() > 2 and now - _motion_samples[0][0] > throw_search_time + throw_sample_time + 0.05:
+		_motion_samples.pop_front()
+
+
+## Velocity of the hand at the fastest moment of the last throw_search_time.
+## Returns [ linear velocity, angular velocity ].
+func _compute_throw_velocity() -> Array:
+	var result : Array = [ Vector3.ZERO, Vector3.ZERO ]
+	if _motion_samples.size() < 2:
+		return result
+
+	var newest_time : float = _motion_samples[-1][0]
+	var best_speed : float = -1.0
+
+	# Try every sample of the search window as the END of a stretch lasting
+	# about throw_sample_time, and keep the stretch with the highest speed.
+	for end_index in range(_motion_samples.size() - 1, 0, -1):
+		var end_sample : Array = _motion_samples[end_index]
+		if newest_time - end_sample[0] > throw_search_time:
+			break
+
+		# Latest sample at least throw_sample_time before the end.
+		var start_index : int = end_index - 1
+		while start_index > 0 and end_sample[0] - _motion_samples[start_index][0] < throw_sample_time:
+			start_index -= 1
+		var start_sample : Array = _motion_samples[start_index]
+
+		var velocity : Array = _velocity_between(start_sample, end_sample)
+		var speed : float = velocity[0].length()
+		if speed > best_speed:
+			best_speed = speed
+			result = velocity
+
+	var linear : Vector3 = result[0] * throw_strength
+	if linear.length() > max_throw_speed:
+		linear = linear.normalized() * max_throw_speed
+	return [ linear, result[1] * throw_spin_strength ]
+
+
+## Linear velocity of the centre of mass and angular velocity between two
+## recorded samples ([time, global transform]).
+func _velocity_between(old_sample : Array, new_sample : Array) -> Array:
+	var dt : float = new_sample[0] - old_sample[0]
+	if dt < 0.005:
+		return [ Vector3.ZERO, Vector3.ZERO ]
+
+	var t_old : Transform3D = old_sample[1]
+	var t_new : Transform3D = new_sample[1]
+
+	# Linear: how far the centre of mass moved, divided by the time.
+	var linear : Vector3 = ((t_new * _centre_local) - (t_old * _centre_local)) / dt
+
+	# Angular: the rotation between the two orientations, as axis * angle,
+	# divided by the time = angular velocity in rad/s.
+	var delta_rotation : Quaternion = (t_new.basis.orthonormalized() \
+		* t_old.basis.orthonormalized().inverse()).get_rotation_quaternion()
+	var angular : Vector3 = Vector3.ZERO
+	var angle : float = delta_rotation.get_angle()
+	if angle > 0.0001:
+		# get_angle() is in [0, 2*PI]: take the short way round.
+		if angle > PI:
+			angle -= TAU
+		angular = delta_rotation.get_axis().normalized() * angle / dt
+
+	return [ linear, angular ]
+
 
 # Called when this object becomes the closest body in an area
 func add_is_closest(area : Area3D) -> void:
@@ -52,6 +167,7 @@ func pick_up(pick_up_by) -> void:
 	original_parent.remove_child(self)
 
 	# Process our pickup.
+	_motion_samples.clear()
 	picked_up_by = pick_up_by
 	picked_up_by.add_child(self)
 	global_transform = current_transform
@@ -179,8 +295,10 @@ func let_go() -> void:
 		tween.kill()
 		tween = null
 
-	# Remember our current transform.
+	# Remember our current transform, and how the hand was moving.
 	var current_transform = global_transform
+	var throw : Array = _compute_throw_velocity()
+	_motion_samples.clear()
 
 	# Remove us from what picked us up.
 	picked_up_by.remove_child(self)
@@ -190,6 +308,13 @@ func let_go() -> void:
 	original_parent.add_child(self)
 	global_transform = current_transform
 	freeze = false
+
+	# Throw: give the body the speed and spin of the hand.
+	sleeping = false
+	linear_velocity = throw[0]
+	angular_velocity = throw[1]
+	if throw[0].length() > 0.5:
+		print("Thrown %s at %.1f m/s, spinning at %.1f rad/s" % [ name, throw[0].length(), throw[1].length() ])
 
 
 # Update our highlight to show that we can be picked up

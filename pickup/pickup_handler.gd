@@ -29,11 +29,21 @@ extends Area3D
 # All 4 fingers (index, middle, ring, pinky) must be curled to spawn the sword.
 @export_range(0.3, 1.0) var fist_curl_threshold : float = 0.6
 
+# Release by opening the hand (hand tracking): while holding, we remember how
+# closed the hand got (lowest average finger straightness). As soon as the
+# fingers open by more than this amount compared to that, we let go, without
+# waiting for the headset's "pickup" value to drop, which can lag behind.
+# Relative, so holding a box with a loosely closed hand doesn't drop it.
+@export_range(0.05, 0.6) var release_open_delta : float = 0.2
+
 var closest_body : PickupAbleBody3D
 var picked_up_body: PickupAbleBody3D
 var was_pickup_pressed : bool = false
 # Pickup pressed with nothing in range: we spawn as soon as the fist is full.
 var waiting_for_fist : bool = false
+# Most closed the hand has been while holding the current object.
+var _held_min_straightness : float = 1.0
+var _held_min_for : PickupAbleBody3D = null
 
 const FINGER_CHAINS := [
 	[ XRHandTracker.HAND_JOINT_INDEX_FINGER_METACARPAL, XRHandTracker.HAND_JOINT_INDEX_FINGER_PHALANX_PROXIMAL,
@@ -123,14 +133,15 @@ func _get_parent_controller() -> XRController3D:
 	return null
 
 
-# True if the hand holding this handler is making a full fist (index, middle,
-# ring and pinky all curled), based on hand tracking joints.
-# Without hand tracking data (e.g. holding controllers) there are no finger
-# joints to check, so we return true and the pickup action alone decides.
-func _is_full_fist() -> bool:
+# Straightness of the index, middle, ring and pinky fingers of our hand,
+# from the hand tracking joints. Straightness = (distance from finger base to
+# tip) / (finger length measured bone by bone): ~1.0 straight, ~0.4 curled.
+# Returns null if there is no hand tracking data (e.g. holding controllers),
+# and an empty array if some joints aren't visible this frame.
+func _finger_straightness():
 	var controller : XRController3D = _get_parent_controller()
 	if not controller:
-		return true
+		return null
 
 	var tracker_name : StringName
 	if controller.tracker == &"left_hand":
@@ -138,30 +149,61 @@ func _is_full_fist() -> bool:
 	elif controller.tracker == &"right_hand":
 		tracker_name = &"/user/hand_tracker/right"
 	else:
-		return true
+		return null
 
 	var hand_tracker : XRHandTracker = XRServer.get_tracker(tracker_name)
 	if not hand_tracker or not hand_tracker.has_tracking_data:
-		return true
+		return null
 
+	var result : Array[float] = []
 	for chain in FINGER_CHAINS:
 		var path_length : float = 0.0
 		var previous : Vector3
 		for i in chain.size():
 			var joint : XRHandTracker.HandJoint = chain[i]
 			if not (hand_tracker.get_hand_joint_flags(joint) & XRHandTracker.HAND_JOINT_FLAG_POSITION_VALID):
-				return false # can't see this finger: don't spawn yet
+				return []
 			var joint_pos : Vector3 = hand_tracker.get_hand_joint_transform(joint).origin
 			if i > 0:
 				path_length += previous.distance_to(joint_pos)
 			previous = joint_pos
 
 		var base : Vector3 = hand_tracker.get_hand_joint_transform(chain[0]).origin
-		var straightness : float = base.distance_to(previous) / max(path_length, 0.0001)
-		if straightness > fist_curl_threshold:
-			return false # this finger isn't curled enough
+		result.append(base.distance_to(previous) / max(path_length, 0.0001))
+	return result
 
+
+# True if the hand holding this handler is making a full fist (index, middle,
+# ring and pinky all curled), based on hand tracking joints.
+# Without hand tracking data (e.g. holding controllers) there are no finger
+# joints to check, so we return true and the pickup action alone decides.
+func _is_full_fist() -> bool:
+	var straightness = _finger_straightness()
+	if straightness == null:
+		return true
+	if straightness.is_empty():
+		return false # can't see all fingers: don't spawn yet
+	for value in straightness:
+		if value > fist_curl_threshold:
+			return false # this finger isn't curled enough
 	return true
+
+
+# True when the fingers have clearly opened since the object was grabbed
+# (see release_open_delta). Always false without hand tracking.
+func _hand_opened_while_holding() -> bool:
+	if _held_min_for != picked_up_body:
+		# New object: start tracking from scratch.
+		_held_min_for = picked_up_body
+		_held_min_straightness = 1.0
+
+	var straightness = _finger_straightness()
+	if straightness == null or straightness.is_empty():
+		return false
+
+	var average : float = (straightness[0] + straightness[1] + straightness[2] + straightness[3]) / 4.0
+	_held_min_straightness = min(_held_min_straightness, average)
+	return average - _held_min_straightness > release_open_delta
 
 
 # 0 = left hand, 1 = right hand, -1 = unknown (from our parent controller).
@@ -214,10 +256,15 @@ func _physics_process(delta) -> void:
 		var threshold : float = 0.4 if was_pickup_pressed else 0.6
 		pickup_pressed = pickup_value > threshold
 
-	# Do we need to let go?
-	if picked_up_body and not pickup_pressed:
-		picked_up_body.let_go()
-		picked_up_body = null
+	# Do we need to let go? Either the headset says the grip is released, or
+	# (with hand tracking) we saw the fingers open, which is usually faster.
+	if picked_up_body:
+		var hand_opened : bool = _hand_opened_while_holding()
+		if not pickup_pressed or hand_opened:
+			if hand_opened and pickup_pressed:
+				print("Released by opening the hand (before the headset's pickup action)")
+			picked_up_body.let_go()
+			picked_up_body = null
 
 	# Do we need to pick something up?
 	if not picked_up_body and pickup_pressed:
