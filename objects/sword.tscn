@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ctqmny8e5bdjh"]
 
-[ext_resource type="PackedScene" uid="uid://chsu12qpbc4od" path="res://assets/gltf/sword.glb" id="1_74bdg"]
+[ext_resource type="PackedScene" uid="uid://012swey7qfyu" path="res://assets/gltf/sword_final.glb" id="1_1ajn3"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_wxr5f"]
 
@@ -9,4 +9,4 @@
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1065561295]
 mesh = SubResource("ArrayMesh_wxr5f")
 
-[node name="sword" parent="MeshInstance3D" unique_id=1339913081 instance=ExtResource("1_74bdg")]
+[node name="sword_final" parent="MeshInstance3D" unique_id=390368713 instance=ExtResource("1_1ajn3")]
