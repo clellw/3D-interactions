@@ -17,7 +17,7 @@ radius = 0.034
 [node name="sword_final" type="RigidBody3D" unique_id=46524695]
 script = ExtResource("1_s28hv")
 
-[node name="Model" parent="." instance=ExtResource("1_74bdg")]
+[node name="Model" parent="." instance=ExtResource("1_1ajn3")]
 transform = Transform3D(0.07, 0, 0, 0, 0.07, 0, 0, 0, 0.07, 0, 0, 0)
 
 [node name="BladeShape" type="CollisionShape3D" parent="."]
