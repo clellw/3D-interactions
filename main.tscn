@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://bl113ujd2uagj" path="res://hand_controller.gd" id="6_e5cto"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
-[ext_resource type="Script" path="res://gestures/finger_snap_detector.gd" id="9_snap"]
+[ext_resource type="Script" uid="uid://qxqkpy1ruwrd" path="res://gestures/finger_snap_detector.gd" id="9_snap"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -159,6 +159,15 @@ influence = 1.0
 script = ExtResource("8_gdsnk")
 grip_action = "pickup"
 
+[node name="LeftSnapDetector" type="Node3D" parent="XROrigin3D" unique_id=14733935 node_paths=PackedStringArray("debug_label")]
+script = ExtResource("9_snap")
+debug_label = NodePath("../../LeftSnapInfo")
+
+[node name="RightSnapDetector" type="Node3D" parent="XROrigin3D" unique_id=680838912 node_paths=PackedStringArray("debug_label")]
+script = ExtResource("9_snap")
+hand = 1
+debug_label = NodePath("../../RightSnapInfo")
+
 [node name="LeftHandInfo" parent="." unique_id=1760315995 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
 transform = Transform3D(0.939693, -0.085635, 0.331126, 0, 0.968147, 0.25038, -0.34202, -0.23528, 0.909761, -0.713026, 0.8718, -0.809953)
 fallback_mesh = NodePath("../XROrigin3D/LeftHandController/FullbackMesh")
@@ -168,28 +177,19 @@ transform = Transform3D(0.939693, 0.085635, -0.331126, 0, 0.968147, 0.25038, 0.3
 hand = 1
 fallback_mesh = NodePath("../XROrigin3D/RightHandController/FullbackMesh")
 
-[node name="LeftSnapInfo" type="Label3D" parent="."]
+[node name="LeftSnapInfo" type="Label3D" parent="." unique_id=1231057669]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.3, -0.9)
 pixel_size = 0.0015
 text = "Left hand - finger snap"
 horizontal_alignment = 0
 vertical_alignment = 2
 
-[node name="RightSnapInfo" type="Label3D" parent="."]
+[node name="RightSnapInfo" type="Label3D" parent="." unique_id=1866395401]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.3, -0.9)
 pixel_size = 0.0015
 text = "Right hand - finger snap"
 horizontal_alignment = 0
 vertical_alignment = 2
-
-[node name="LeftSnapDetector" type="Node3D" parent="XROrigin3D" node_paths=PackedStringArray("debug_label")]
-script = ExtResource("9_snap")
-debug_label = NodePath("../../LeftSnapInfo")
-
-[node name="RightSnapDetector" type="Node3D" parent="XROrigin3D" node_paths=PackedStringArray("debug_label")]
-script = ExtResource("9_snap")
-hand = 1
-debug_label = NodePath("../../RightSnapInfo")
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
