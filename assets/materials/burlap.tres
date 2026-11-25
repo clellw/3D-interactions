@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dniyo6exugwvm"]
+
+[ext_resource type="Shader" uid="uid://dc2lyeljv7dcl" path="res://assets/materials/burlap.gdshader" id="1_eig4d"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_eig4d")
+shader_parameter/weave_scale_x = 90.0
+shader_parameter/weave_scale_y = 65.0
+shader_parameter/fiber_strength = 0.12
+shader_parameter/color_variation = 0.15
