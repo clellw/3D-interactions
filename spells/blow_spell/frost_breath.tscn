@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://cxcqhlbd0r8yv"]
+
+[ext_resource type="Script" uid="uid://dfldcof0ty8dy" path="res://spells/blow_spell/frost_breath.gd" id="1_f75tw"]
+
+[sub_resource type="Curve" id="Curve_js6nx"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_5t1r3"]
+curve = SubResource("Curve_js6nx")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_s5tut"]
+lifetime_randomness = 0.2
+direction = Vector3(0, 0, -1)
+spread = 6.0
+initial_velocity_min = 10.0
+initial_velocity_max = 40.0
+scale_curve = SubResource("CurveTexture_5t1r3")
+collision_mode = 1
+collision_friction = 0.5
+collision_bounce = 0.05
+collision_use_scale = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_g28q7"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_dqbuj"]
+material = SubResource("StandardMaterial3D_g28q7")
+radius = 0.1
+height = 0.2
+radial_segments = 32
+rings = 16
+
+[sub_resource type="Curve" id="Curve_8umpq"]
+_data = [Vector2(0, 0.50000006), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_2ty0x"]
+curve = SubResource("Curve_8umpq")
+
+[sub_resource type="Gradient" id="Gradient_mqf5e"]
+offsets = PackedFloat32Array(0, 0.22328244)
+colors = PackedColorArray(1, 1, 1, 0.5294118, 0.6039216, 0.90588236, 0.9098039, 0.39215687)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_fi8gr"]
+gradient = SubResource("Gradient_mqf5e")
+
+[sub_resource type="Curve" id="Curve_1rxxs"]
+_data = [Vector2(0, 0.08635092), 0.0, 0.0, 0, 0, Vector2(0.20400731, 0.9972145), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_42f21"]
+curve = SubResource("Curve_1rxxs")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_px1lp"]
+lifetime_randomness = 0.2
+emission_shape_scale = Vector3(0, 1, 1)
+direction = Vector3(0, 0, -1)
+spread = 3.0
+initial_velocity_min = 10.0
+initial_velocity_max = 40.0
+gravity = Vector3(0, -5, 0)
+linear_accel_min = -5.000002
+linear_accel_max = 4.9999976
+scale_min = 0.5
+scale_curve = SubResource("CurveTexture_42f21")
+color_ramp = SubResource("GradientTexture1D_fi8gr")
+alpha_curve = SubResource("CurveTexture_2ty0x")
+turbulence_noise_strength = 0.1
+turbulence_noise_scale = 1.0
+collision_mode = 1
+collision_friction = 0.5
+collision_bounce = 0.05
+collision_use_scale = true
+sub_emitter_keep_velocity = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ifcpf"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_l6f3m"]
+material = SubResource("StandardMaterial3D_ifcpf")
+radius = 0.4
+height = 0.8
+radial_segments = 32
+rings = 16
+
+[node name="FrostBreath" type="Node3D" unique_id=662737621]
+script = ExtResource("1_f75tw")
+
+[node name="SnowParticles" type="GPUParticles3D" parent="." unique_id=1648940100]
+emitting = false
+amount = 100
+collision_base_size = 0.5
+visibility_aabb = AABB(-2, -2, -25, 4, 4, 30)
+process_material = SubResource("ParticleProcessMaterial_s5tut")
+draw_pass_1 = SubResource("SphereMesh_dqbuj")
+
+[node name="IceParticles" type="GPUParticles3D" parent="." unique_id=335073010]
+emitting = false
+amount = 500
+collision_base_size = 0.5
+visibility_aabb = AABB(-2, -2, -25, 4, 4, 30)
+process_material = SubResource("ParticleProcessMaterial_px1lp")
+draw_pass_1 = SubResource("SphereMesh_l6f3m")
+
+[node name="RayCast3D" type="RayCast3D" parent="." unique_id=225252830]
+target_position = Vector3(0, 0, -20)
+debug_shape_custom_color = Color(0.8862745, 0.8745098, 0, 1)
+debug_shape_thickness = 5

@@ -4,16 +4,15 @@ extends Node3D
 
 @export_enum("Left", "Right") var hand : int = 1
 
-@onready var feedback : Node3D = $Feedback
-@onready var label: Label3D = $Feedback/Label
 @onready var mic_player: AudioStreamPlayer = $AudioStreamPlayer
-@onready var mic_status: Label3D = $MicStatus
 @onready var mic_bus_idx: int = AudioServer.get_bus_index("Mic")
 @export var blow_threshold_db: float = -40.0 # Blowing is usually much louder than talking
 @export var particle_forward_local: Vector3 = Vector3(0.0, 0.0, -1.0)
-@onready var fire_particles: GPUParticles3D = $FireParticles
+@onready var frost_breath: Node3D = $FrostBreath
 var spectrum: AudioEffectSpectrumAnalyzerInstance
+@onready var blow_magic_circle: Node3D = $BlowMagicCircle
 
+signal spell_activated(activated:bool)
 
 func _ready() -> void:
 	get_tree().on_request_permissions_result.connect(_on_permission_result)
@@ -21,22 +20,13 @@ func _ready() -> void:
 	if mic_bus_idx == -1:
 		push_warning("The 'Mic' audio bus does not exist")
 
-	var particle_material := fire_particles.process_material as ParticleProcessMaterial
-	if particle_material:
-		particle_material.direction = particle_forward_local
-
-	var camera := get_node_or_null("../XROrigin3D/XRCamera3D")
-	if camera:
-		mic_status.reparent(camera)
-		mic_status.position = Vector3(0.0, -0.18, -0.8)
-
 	# Wait for OpenXR session focus so Horizon OS doesn't swallow the popup
 	var xr_interface := XRServer.find_interface("OpenXR")
 	if xr_interface and xr_interface.is_initialized():
 		xr_interface.session_begun.connect(_on_xr_session_begun)
 	else:
 		request_mic_access()
-	spectrum = AudioServer.get_bus_effect_instance(mic_bus_idx, 0)
+	#spectrum = AudioServer.get_bus_effect_instance(mic_bus_idx, 0)
 
 	# Uncomment to calibrate values in your Output log:
 	# print("Low: %.4f | Voice: %.4f | Ratio: %.2f | Blowing: %s" % [low_rumble, voice_band, ratio, is_blowing])
@@ -52,8 +42,6 @@ func request_mic_access() -> void:
 		print("RECORD_AUDIO already granted: ", granted)
 		if granted:
 			_start_microphone()
-		else:
-			mic_status.text = "Waiting for Mic Permission..."
 	else:
 		_start_microphone()
 
@@ -64,7 +52,6 @@ func _on_permission_result(permission: String, granted: bool) -> void:
 		if granted:
 			_start_microphone()
 		else:
-			mic_status.text = "Mic Permission DENIED"
 			push_warning("Microphone permission denied by user in headset.")
 
 
@@ -74,37 +61,29 @@ func _start_microphone() -> void:
 
 
 
-func _process(delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	var peak_db := -80.0
 	if mic_bus_idx >= 0:
 		peak_db = AudioServer.get_bus_peak_volume_left_db(mic_bus_idx, 0)
 
-	mic_status.text = "Mic: %.1f dB" % peak_db
 	var detected := is_ok_gesture(hand)
-	feedback.visible = detected
-	
-	# 1. Measure wind/turbulence rumble (20 Hz - 120 Hz)
-	#var low_rumble = spectrum.get_magnitude_for_frequency_range(20.0, 120.0).length()
-	#
-	## 2. Measure human vocal range (300 Hz - 2500 Hz)
-	#var voice_band = spectrum.get_magnitude_for_frequency_range(300.0, 2500.0).length()
-#
-	## 3. Check if low rumble dominates over vocal frequencies
-	#var ratio = low_rumble / max(voice_band, 0.0001)
 
-	if detected and peak_db >= blow_threshold_db:
+
+	if detected:
 		var blow_origin := get_ok_circle_midpoint(hand)
-		#var blow_direction := get_ok_circle_normal(hand, blow_origin)
-		feedback.global_position = blow_origin
-		label.text = " OK | Mic: %.1f dB" % peak_db 
-		var pulse := 1.0 + sin(Time.get_ticks_msec() * 0.012) * 0.12
-		feedback.scale = Vector3.ONE * pulse
-		fire_particles.emitting = true
-		fire_particles.global_position = blow_origin
-		fire_particles.global_rotation = xr_camera.global_rotation
+		blow_magic_circle.visible = true
+		blow_magic_circle.global_position = blow_origin + Vector3(-0.02,0.025,0.025)
+		blow_magic_circle.global_rotation = xr_camera.global_rotation
+		frost_breath.global_position = blow_origin
+		frost_breath.global_rotation = xr_camera.global_rotation
 			
+		if peak_db >= blow_threshold_db:
+			spell_activated.emit(true)
+		else:
+			spell_activated.emit(false)
 	else:
-		fire_particles.emitting = false
+		blow_magic_circle.visible = false
+		spell_activated.emit(false)
 
 
 func get_ok_circle_midpoint(hand_index: int) -> Vector3:

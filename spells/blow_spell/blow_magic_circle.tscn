@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bia2wkaxwm41f"]
+
+[ext_resource type="Script" uid="uid://cfd2shxqa2nxc" path="res://spells/blow_spell/blow_magic_circle.gd" id="1_r5p5r"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5p5r"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(0.7490196, 1, 1, 1)
+
+[sub_resource type="TorusMesh" id="TorusMesh_abwix"]
+material = SubResource("StandardMaterial3D_r5p5r")
+inner_radius = 0.1
+outer_radius = 0.089
+rings = 6
+ring_segments = 3
+
+[node name="BlowMagicCircle" type="Node3D" unique_id=1127160329]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+script = ExtResource("1_r5p5r")
+
+[node name="OuterCircle" type="MeshInstance3D" parent="." unique_id=573340288]
+transform = Transform3D(0.5, 0, 0, 0, -2.1855694e-08, -0.5, 0, 0.5, -2.1855694e-08, 0, 0, 0)
+mesh = SubResource("TorusMesh_abwix")
+
+[node name="InnerCircle" type="MeshInstance3D" parent="." unique_id=1034031148]
+transform = Transform3D(0.3, 0, 0, 0, -1.3113417e-08, -0.3, 0, 0.3, -1.3113417e-08, 0, 0, 0)
+mesh = SubResource("TorusMesh_abwix")

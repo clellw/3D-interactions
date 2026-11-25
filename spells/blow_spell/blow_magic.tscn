@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://dr0nr4kslsfdx"]
+
+[ext_resource type="Script" uid="uid://dxlqj7rlplnsy" path="res://spells/blow_spell/blow_magic.gd" id="1_8qk8a"]
+[ext_resource type="PackedScene" uid="uid://cxcqhlbd0r8yv" path="res://spells/blow_spell/frost_breath.tscn" id="2_w7a0w"]
+[ext_resource type="PackedScene" uid="uid://bia2wkaxwm41f" path="res://spells/blow_spell/blow_magic_circle.tscn" id="3_w7a0w"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_nbo6f"]
+
+[node name="BlowMagic" type="Node3D" unique_id=310733973]
+script = ExtResource("1_8qk8a")
+
+[node name="FrostBreath" parent="." unique_id=662737621 instance=ExtResource("2_w7a0w")]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="." unique_id=1853719569]
+stream = SubResource("AudioStreamMicrophone_nbo6f")
+autoplay = true
+bus = &"Mic"
+
+[node name="BlowMagicCircle" parent="." unique_id=1647114097 instance=ExtResource("3_w7a0w")]
+
+[connection signal="spell_activated" from="." to="FrostBreath" method="_on_blow_magic_spell_activated"]

@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://b37oxqwt8r28" path="res://objects/box.tscn" id="7_6sqt7"]
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
-[ext_resource type="PackedScene" uid="uid://bbc70rpnirw66" path="res://blow_magic.tscn" id="12_dg77c"]
+[ext_resource type="PackedScene" uid="uid://dr0nr4kslsfdx" path="res://spells/blow_spell/blow_magic.tscn" id="12_dg77c"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -183,6 +183,7 @@ script = ExtResource("8_gdsnk")
 grip_action = "pickup"
 
 [node name="BlowMagic" parent="." unique_id=1901747355 node_paths=PackedStringArray("xr_camera") instance=ExtResource("12_dg77c")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2961502, 0)
 xr_camera = NodePath("../XROrigin3D/XRCamera3D")
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]

@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 
 [audio]
 
+buses/default_bus_layout="uid://bkrmc1oprtoui"
 driver/enable_input=true
 
 [autoload]
@@ -39,7 +40,7 @@ enabled=PackedStringArray("res://addons/godot-xr-tools/plugin.cfg")
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
+renderer/rendering_method="mobile"
 renderer/rendering_method.mobile="gl_compatibility"
 textures/vram_compression/import_etc2_astc=true
 
