@@ -2,11 +2,19 @@
 
 [ext_resource type="PackedScene" uid="uid://bybsq0t6r4rcx" path="res://assets/gltf/mannequin_final.glb" id="1_75dar"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wxr5f"]
+
 [sub_resource type="ArrayMesh" id="ArrayMesh_wxr5f"]
 
 [node name="Mannequin" type="Node3D" unique_id=48309245]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1958531019]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1438018778]
+motion_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=920797131]
+shape = SubResource("CapsuleShape3D_wxr5f")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D" unique_id=1958531019]
 mesh = SubResource("ArrayMesh_wxr5f")
 
-[node name="mannequin_final" parent="MeshInstance3D" unique_id=2108014560 instance=ExtResource("1_75dar")]
+[node name="mannequin_final" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D" unique_id=2108014560 instance=ExtResource("1_75dar")]

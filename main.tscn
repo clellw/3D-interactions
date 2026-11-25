@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://dji5rxbje2en" path="res://hand_mesh.gd" id="7_yj2fr"]
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
 [ext_resource type="Script" uid="uid://qxqkpy1ruwrd" path="res://gestures/finger_snap_detector.gd" id="9_snap"]
+[ext_resource type="PackedScene" uid="uid://ny74d8kiffr3" path="res://objects/mannequin.tscn" id="10_4c57u"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -33,6 +34,48 @@ subdivide_depth = 10
 radius = 0.01
 height = 0.02
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_wxr5f"]
+material = ExtResource("2_kek77")
+flip_faces = true
+size = Vector2(1000, 100)
+subdivide_width = 10
+subdivide_depth = 10
+center_offset = Vector3(0, 50, 0)
+orientation = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5wdvn"]
+material = ExtResource("2_kek77")
+size = Vector2(1000, 100)
+subdivide_width = 10
+subdivide_depth = 10
+center_offset = Vector3(0, 50, 0)
+orientation = 0
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jh4c5"]
+material = ExtResource("2_kek77")
+size = Vector2(1000, 100)
+subdivide_width = 10
+subdivide_depth = 10
+center_offset = Vector3(0, 50, 0)
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_0ul58"]
+material = ExtResource("2_kek77")
+flip_faces = true
+size = Vector2(1000, 100)
+subdivide_width = 10
+subdivide_depth = 10
+center_offset = Vector3(0, 0, 500)
+orientation = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1e760"]
+material = ExtResource("2_kek77")
+flip_faces = true
+size = Vector2(1000, 1000)
+subdivide_width = 10
+subdivide_depth = 10
+center_offset = Vector3(0, 100, 0)
+
 [node name="Main" type="Node3D" unique_id=1288509691]
 
 [node name="StartVR" type="Node3D" parent="." unique_id=1237672918]
@@ -42,7 +85,7 @@ script = ExtResource("2_5rtkn")
 environment = SubResource("Environment_0xu52")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=212839333]
-transform = Transform3D(0.397904, -0.794516, 0.458712, 0, 0.499998, 0.866026, -0.917427, -0.344595, 0.198951, 0, 5, 0)
+transform = Transform3D(0.397904, -0.794516, 0.458712, 0, 0.499998, 0.866026, -0.917427, -0.344595, 0.198951, 0, 95, 0)
 directional_shadow_max_distance = 10.0
 
 [node name="Floor" type="MeshInstance3D" parent="." unique_id=2075817668]
@@ -185,6 +228,27 @@ pixel_size = 0.0015
 text = "Right hand - finger snap"
 horizontal_alignment = 0
 vertical_alignment = 2
+[node name="WallRight" type="MeshInstance3D" parent="." unique_id=361120508]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, 0)
+mesh = SubResource("PlaneMesh_wxr5f")
+
+[node name="WallLeft" type="MeshInstance3D" parent="." unique_id=2053591483]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -500, 0, 0)
+mesh = SubResource("PlaneMesh_5wdvn")
+
+[node name="WallTop" type="MeshInstance3D" parent="." unique_id=88895133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -500)
+mesh = SubResource("PlaneMesh_jh4c5")
+
+[node name="WallBottom" type="MeshInstance3D" parent="." unique_id=2112816473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+mesh = SubResource("PlaneMesh_0ul58")
+
+[node name="Ceiling" type="MeshInstance3D" parent="." unique_id=239122694]
+mesh = SubResource("PlaneMesh_1e760")
+
+[node name="Mannequin" parent="." unique_id=48309245 instance=ExtResource("10_4c57u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.173433, 0, 0)
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
