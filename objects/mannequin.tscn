@@ -2,19 +2,82 @@
 
 [ext_resource type="PackedScene" uid="uid://bybsq0t6r4rcx" path="res://assets/gltf/mannequin_final.glb" id="1_75dar"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wxr5f"]
-
 [sub_resource type="ArrayMesh" id="ArrayMesh_wxr5f"]
 
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_wxr5f"]
+radius = 0.0048828125
+height = 0.032844543
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5wdvn"]
+radius = 0.9140625
+height = 5.887451
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jh4c5"]
+radius = 1.3164063
+height = 3.9094238
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0ul58"]
+radius = 1.9172363
+height = 3.8344727
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1e760"]
+radius = 0.6386719
+height = 3.2828674
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_0r6jq"]
+radius = 0.51464844
+height = 3.8027344
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_pu85u"]
+radius = 0.6010742
+height = 3.7060547
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_8do4m"]
+radius = 0.4428711
+height = 3.6582031
+
 [node name="Mannequin" type="Node3D" unique_id=48309245]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1958531019]
+mesh = SubResource("ArrayMesh_wxr5f")
+
+[node name="mannequin_final" parent="MeshInstance3D" unique_id=2108014560 instance=ExtResource("1_75dar")]
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1438018778]
 motion_mode = 1
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=920797131]
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1510462922]
+transform = Transform3D(100, 0, 0, 0, -4.3711384e-06, -99.99999, 0, 99.99999, -4.3711384e-06, -0.018445969, 5.2360187, -2.0865736)
 shape = SubResource("CapsuleShape3D_wxr5f")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D/CollisionShape3D" unique_id=1958531019]
-mesh = SubResource("ArrayMesh_wxr5f")
+[node name="CollisionShape3D3" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1001289091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4002686, 0)
+shape = SubResource("CapsuleShape3D_5wdvn")
 
-[node name="mannequin_final" parent="CharacterBody3D/CollisionShape3D/MeshInstance3D" unique_id=2108014560 instance=ExtResource("1_75dar")]
+[node name="CollisionShape3D4" type="CollisionShape3D" parent="CharacterBody3D" unique_id=187383940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.7422633, 0)
+shape = SubResource("CapsuleShape3D_jh4c5")
+
+[node name="CollisionShape3D5" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1036126303]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.352173, 0)
+shape = SubResource("CapsuleShape3D_0ul58")
+
+[node name="CollisionShape3D7" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1696862916]
+transform = Transform3D(0.48330912, -0.5127754, 0.7095587, -0.1508919, 0.74958503, 0.64448, -0.8623481, -0.41854957, 0.28490773, 1.7105507, 4.846468, 1.5565243)
+shape = SubResource("CapsuleShape3D_1e760")
+
+[node name="CollisionShape3D6" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1775167851]
+transform = Transform3D(0.8453566, -0.43816486, 0.3055877, 0.53420246, 0.6933806, -0.48358187, -1.3508629e-08, 0.5720448, 0.82022256, 1.4065623, 4.7525725, -1.4969745)
+shape = SubResource("CapsuleShape3D_1e760")
+
+[node name="CollisionShape3D8" type="CollisionShape3D" parent="CharacterBody3D" unique_id=198574236]
+transform = Transform3D(0.8350107, 0.50492036, 0.21866077, -0.55023366, 0.7662452, 0.33183008, 0, -0.3973962, 0.9176471, -1.254869, 4.5683827, 1.4789777)
+shape = SubResource("CapsuleShape3D_0r6jq")
+
+[node name="CollisionShape3D9" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1755844388]
+transform = Transform3D(0.8364797, 0.45821512, -0.30056697, -0.54799783, 0.69943285, -0.45879415, 0, 0.54848206, 0.8361623, -1.3119382, 4.7843237, -1.6025536)
+shape = SubResource("CapsuleShape3D_pu85u")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1722758975]
+transform = Transform3D(1, 0, 0, 0, 0.044437822, -0.9990122, 0, 0.9990122, 0.044437822, 0, 5.79679, 2.902526)
+shape = SubResource("CapsuleShape3D_8do4m")
