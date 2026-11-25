@@ -1,7 +1,0 @@
-[gd_resource type="ShaderMaterial" format=3 uid="uid://df0joeagxaw27"]
-
-[ext_resource type="Shader" uid="uid://c008b4t7hsvi2" path="res://assets/materials/rubber.gdshader" id="1_olacq"]
-
-[resource]
-render_priority = 0
-shader = ExtResource("1_olacq")

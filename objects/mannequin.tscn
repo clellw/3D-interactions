@@ -41,7 +41,7 @@ height = 3.6582031
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1958531019]
 mesh = SubResource("ArrayMesh_wxr5f")
 
-[node name="mannequin_final" parent="MeshInstance3D" unique_id=2108014560 instance=ExtResource("1_75dar")]
+[node name="mannequin_final" parent="MeshInstance3D" unique_id=1272118131 instance=ExtResource("1_75dar")]
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1438018778]
 motion_mode = 1

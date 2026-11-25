@@ -43,8 +43,8 @@ _subresources={
 "materials": {
 "Basic Leather Procedural": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/leather.tres",
-"use_external/path": "uid://dwxqogyovli5m"
+"use_external/fallback_path": "res://assets/materials/simple_leather.tres",
+"use_external/path": "uid://c40t25phq7xci"
 },
 "Metals with imperfections generator": {
 "use_external/enabled": true,
@@ -53,8 +53,8 @@ _subresources={
 },
 "Powder Coated Metal": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/metal_powder_coated.tres",
-"use_external/path": "uid://cmmfmas3gxo64"
+"use_external/fallback_path": "res://assets/materials/simple_metal.tres",
+"use_external/path": "uid://c4mfdlm4dgmn3"
 },
 "Procedural Crystal": {
 "use_external/enabled": true,

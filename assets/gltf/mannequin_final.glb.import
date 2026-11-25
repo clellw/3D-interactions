@@ -43,18 +43,18 @@ _subresources={
 "materials": {
 "Burlap": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/burlap.tres",
-"use_external/path": "uid://dniyo6exugwvm"
+"use_external/fallback_path": "res://assets/materials/burlap_baker.tres",
+"use_external/path": "uid://7gh6kuexxro1"
 },
 "Rubber": {
 "use_external/enabled": true,
-"use_external/fallback_path": "res://assets/materials/rubber.tres",
-"use_external/path": "uid://df0joeagxaw27"
+"use_external/fallback_path": "res://assets/materials/rubber_baker.tres",
+"use_external/path": "uid://dmfaq2sjof6xb"
 },
 "Wood": {
 "use_external/enabled": true,
 "use_external/fallback_path": "res://assets/materials/wood.tres",
-"use_external/path": "uid://buww0hm65t5w"
+"use_external/path": "uid://bgrwke7ojor14"
 }
 }
 }

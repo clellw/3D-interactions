@@ -12,10 +12,6 @@ uniform vec3 emission_color = vec3(0.0, 0.454164, 1.0);
 uniform float normal_intensity = 0.0;
 uniform float roughness_value = 0.4;
 
-// Godot-only: fake refraction through the screen texture.
-uniform float refraction_strength = 0.06;
-uniform sampler2D screen_tex : hint_screen_texture, repeat_disable, filter_linear_mipmap;
-
 // Bounding box of the mesh in Blender local space (for "Generated" coordinates).
 // Values for the "Sphere" object of sword.blend.
 uniform vec3 bbox_min = vec3(-1.0, -1.0, -1.0);
@@ -58,18 +54,14 @@ void fragment() {
 	}
 	float ndotv = clamp(dot(normalize(nrm), VIEW), 0.0, 1.0);
 
-	// Transmission: blurred, tinted background seen through the surface.
-	vec2 refr_uv = SCREEN_UV + nrm.xy * refraction_strength;
-	vec3 bg = textureLod(screen_tex, refr_uv, rough * 6.0).rgb;
-	vec3 transmitted = bg * albedo * transmission_weight * (1.0 - fres);
-
 	// Sheen approximation (Godot has no sheen lobe): tinted grazing-angle glow.
 	vec3 sheen = sheen_tint * sheen_weight * pow(1.0 - ndotv, mix(6.0, 2.0, sheen_roughness));
 
-	ALBEDO = albedo * (1.0 - transmission_weight);
+	ALPHA = clamp(1.0 - transmission_weight * 0.65 + fres * 3.0, 0.0, 1.0);
+	ALBEDO = albedo;
 	METALLIC = 0.0;
 	ROUGHNESS = rough;
 	SPECULAR = 0.5; // IOR 1.5
 	NORMAL = nrm;
-	EMISSION = transmitted + sheen + emission_color * emis_strength;
+	EMISSION = sheen + emission_color * emis_strength;
 }

@@ -1,0 +1,14 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://7gh6kuexxro1"]
+
+[ext_resource type="Texture2D" uid="uid://brvc8rkf8kjsu" path="res://assets/images/color_burlap.png" id="1_l2qq5"]
+[ext_resource type="Texture2D" uid="uid://cimwadday7uj6" path="res://assets/images/emit_burlap.png" id="2_6cdgi"]
+[ext_resource type="Texture2D" uid="uid://dqvqvw0xqyvb" path="res://assets/images/normal_burlap.png" id="3_aoh1m"]
+[ext_resource type="Texture2D" uid="uid://c1t4m6sdvmcs0" path="res://assets/images/rough_burlap.png" id="4_djgkv"]
+
+[resource]
+albedo_texture = ExtResource("1_l2qq5")
+roughness_texture = ExtResource("4_djgkv")
+emission_enabled = true
+emission_texture = ExtResource("2_6cdgi")
+normal_enabled = true
+normal_texture = ExtResource("3_aoh1m")

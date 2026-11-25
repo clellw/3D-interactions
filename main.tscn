@@ -2,7 +2,6 @@
 
 [ext_resource type="PackedScene" uid="uid://3gjkc6qju2n3" path="res://assets/gltf/LeftHandHumanoid.gltf" id="2_3hxem"]
 [ext_resource type="Script" uid="uid://dmwdpfwh7uxw" path="res://start_vr.gd" id="2_5rtkn"]
-[ext_resource type="Material" uid="uid://5ewi60av7op7" path="res://assets/materials/floor_wood.tres" id="2_kek77"]
 [ext_resource type="PackedScene" uid="uid://bymg1qpy1tu2w" path="res://assets/gltf/RightHandHumanoid.gltf" id="3_oifi1"]
 [ext_resource type="PackedScene" uid="uid://caospno4tdf1p" path="res://pickup/pickup_handler.tscn" id="3_sg1io"]
 [ext_resource type="PackedScene" uid="uid://b4ebsfoqnxu81" path="res://hand_info.tscn" id="5_wlhtu"]
@@ -23,9 +22,12 @@ background_mode = 2
 sky = SubResource("Sky_tsis2")
 tonemap_mode = 4
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n148m"]
+albedo_color = Color(0.1417195, 0.058427498, 0.0088423565, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_6hhse"]
-material = ExtResource("2_kek77")
-size = Vector2(1000, 1000)
+material = SubResource("StandardMaterial3D_n148m")
+size = Vector2(100, 100)
 subdivide_width = 10
 subdivide_depth = 10
 
@@ -33,47 +35,62 @@ subdivide_depth = 10
 radius = 0.01
 height = 0.02
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75dar"]
+albedo_color = Color(0.27970654, 0.13733065, 0.03161288, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_wxr5f"]
-material = ExtResource("2_kek77")
+material = SubResource("StandardMaterial3D_75dar")
 flip_faces = true
-size = Vector2(1000, 100)
+size = Vector2(100, 10)
 subdivide_width = 10
 subdivide_depth = 10
-center_offset = Vector3(0, 50, 0)
+center_offset = Vector3(0, 5, 0)
 orientation = 0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a0smq"]
+albedo_color = Color(0.27970654, 0.13733065, 0.03161288, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_5wdvn"]
-material = ExtResource("2_kek77")
-size = Vector2(1000, 100)
+material = SubResource("StandardMaterial3D_a0smq")
+size = Vector2(100, 10)
 subdivide_width = 10
 subdivide_depth = 10
-center_offset = Vector3(0, 50, 0)
+center_offset = Vector3(0, 5, 0)
 orientation = 0
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yef8s"]
+albedo_color = Color(0.27970654, 0.13733065, 0.03161288, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_jh4c5"]
-material = ExtResource("2_kek77")
-size = Vector2(1000, 100)
+material = SubResource("StandardMaterial3D_yef8s")
+size = Vector2(100, 10)
 subdivide_width = 10
 subdivide_depth = 10
-center_offset = Vector3(0, 50, 0)
+center_offset = Vector3(0, 5, 0)
 orientation = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_t7aa0"]
+albedo_color = Color(0.27970654, 0.13733065, 0.03161288, 1)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_0ul58"]
-material = ExtResource("2_kek77")
+material = SubResource("StandardMaterial3D_t7aa0")
 flip_faces = true
-size = Vector2(1000, 100)
+size = Vector2(100, 10)
 subdivide_width = 10
 subdivide_depth = 10
-center_offset = Vector3(0, 0, 500)
+center_offset = Vector3(0, 5, 0)
 orientation = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ufiie"]
+albedo_color = Color(0.27970654, 0.13733065, 0.03161288, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_1e760"]
-material = ExtResource("2_kek77")
+material = SubResource("StandardMaterial3D_ufiie")
 flip_faces = true
-size = Vector2(1000, 1000)
+size = Vector2(100, 100)
 subdivide_width = 10
 subdivide_depth = 10
-center_offset = Vector3(0, 100, 0)
+center_offset = Vector3(0, 10, 0)
 
 [node name="Main" type="Node3D" unique_id=1288509691]
 
@@ -206,19 +223,19 @@ hand = 1
 fallback_mesh = NodePath("../XROrigin3D/RightHandController/FullbackMesh")
 
 [node name="WallRight" type="MeshInstance3D" parent="." unique_id=361120508]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, 0)
 mesh = SubResource("PlaneMesh_wxr5f")
 
 [node name="WallLeft" type="MeshInstance3D" parent="." unique_id=2053591483]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -500, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -50, 0, 0)
 mesh = SubResource("PlaneMesh_5wdvn")
 
 [node name="WallTop" type="MeshInstance3D" parent="." unique_id=88895133]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -500)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -50)
 mesh = SubResource("PlaneMesh_jh4c5")
 
 [node name="WallBottom" type="MeshInstance3D" parent="." unique_id=2112816473]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 50, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 50)
 mesh = SubResource("PlaneMesh_0ul58")
 
 [node name="Ceiling" type="MeshInstance3D" parent="." unique_id=239122694]
