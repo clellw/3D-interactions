@@ -39,7 +39,30 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Basic Leather Procedural": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/leather.tres",
+"use_external/path": "uid://dwxqogyovli5m"
+},
+"Metals with imperfections generator": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/metal_blade.tres",
+"use_external/path": "uid://wg4350udxhw8"
+},
+"Powder Coated Metal": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/metal_powder_coated.tres",
+"use_external/path": "uid://cmmfmas3gxo64"
+},
+"Procedural Crystal": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/crystal_sword.tres",
+"use_external/path": "uid://dd47f4hwlk7ia"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1
 gltf/texture_map_mode=1

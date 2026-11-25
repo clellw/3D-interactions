@@ -10,3 +10,4 @@
 mesh = SubResource("ArrayMesh_wxr5f")
 
 [node name="sword_final" parent="MeshInstance3D" unique_id=390368713 instance=ExtResource("1_1ajn3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00028008223, 0.018337727, 0.0050935745)

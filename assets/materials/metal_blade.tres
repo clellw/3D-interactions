@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://wg4350udxhw8"]
+
+[ext_resource type="Shader" uid="uid://dstb3h8tlo8ud" path="res://assets/materials/metal_blade.gdshader" id="1_0dbqp"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_0dbqp")
+shader_parameter/main_color = Vector3(0.96469, 0.94731, 0.92158)
+shader_parameter/rim_color = Vector3(0.0302668, 0.0302668, 0.0302668)
+shader_parameter/rim_size = 0.2
+shader_parameter/roughness_base = 0.13
+shader_parameter/dirt_strength = 0.2
+shader_parameter/dirt_size = 20.0
+shader_parameter/scratches_depth = 0.0746448
+shader_parameter/scratches_size = 6.6
+shader_parameter/bbox_min = Vector3(-1.1702, -1.038, -1)
+shader_parameter/bbox_size = Vector3(2.3405, 2.076, 5.1324)
