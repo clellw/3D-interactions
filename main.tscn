@@ -93,6 +93,7 @@ mesh = SubResource("PlaneMesh_6hhse")
 
 [node name="RecenterInfo" type="Label3D" parent="Floor" unique_id=1101802641]
 transform = Transform3D(0.59873, 0, 0.800951, 0, 1, 0, -0.800951, 0, 0.59873, -1.76283, 1.50033, -0.380399)
+visible = false
 pixel_size = 0.003
 text = "If you are not facing the table,
 recenter your headset.
@@ -208,26 +209,31 @@ debug_label = NodePath("../../RightSnapInfo")
 
 [node name="LeftHandInfo" parent="." unique_id=1760315995 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
 transform = Transform3D(0.939693, -0.085635, 0.331126, 0, 0.968147, 0.25038, -0.34202, -0.23528, 0.909761, -0.713026, 0.8718, -0.809953)
+visible = false
 fallback_mesh = NodePath("../XROrigin3D/LeftHandController/FullbackMesh")
 
 [node name="RightHandInfo" parent="." unique_id=166019423 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
 transform = Transform3D(0.939693, 0.085635, -0.331126, 0, 0.968147, 0.25038, 0.34202, -0.23528, 0.909761, 0.278022, 0.8718, -0.881943)
+visible = false
 hand = 1
 fallback_mesh = NodePath("../XROrigin3D/RightHandController/FullbackMesh")
 
 [node name="LeftSnapInfo" type="Label3D" parent="." unique_id=1231057669]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.25, 1.3, -0.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6049843, 1.3, -0.9)
+visible = false
 pixel_size = 0.0015
 text = "Left hand - finger snap"
 horizontal_alignment = 0
 vertical_alignment = 2
 
 [node name="RightSnapInfo" type="Label3D" parent="." unique_id=1866395401]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 1.3, -0.9)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2130786, 1.3, -0.9)
+visible = false
 pixel_size = 0.0015
 text = "Right hand - finger snap"
 horizontal_alignment = 0
 vertical_alignment = 2
+
 [node name="WallRight" type="MeshInstance3D" parent="." unique_id=361120508]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 500, 0, 0)
 mesh = SubResource("PlaneMesh_wxr5f")
@@ -248,7 +254,7 @@ mesh = SubResource("PlaneMesh_0ul58")
 mesh = SubResource("PlaneMesh_1e760")
 
 [node name="Mannequin" parent="." unique_id=48309245 instance=ExtResource("10_4c57u")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.173433, 0, 0)
+transform = Transform3D(0.027113397, 0, -0.24852538, 0, 0.25, 0, 0.24852538, 0, 0.027113397, 0.03892696, 0, -3.0746999)
 
 [editable path="XROrigin3D/LeftHandMesh/LeftHandHumanoid2"]
 [editable path="XROrigin3D/RightHandMesh/RightHandHumanoid2"]
