@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bdpih0o5eijqw"
-path="res://.godot/imported/mannequin.glb-1a06a4a52f6d7207854952935abb3a37.scn"
+uid="uid://bybsq0t6r4rcx"
+path="res://.godot/imported/mannequin_final.glb-10465605627e2f803974d968641fba91.scn"
 
 [deps]
 
-source_file="res://assets/gltf/mannequin.glb"
-dest_files=["res://.godot/imported/mannequin.glb-1a06a4a52f6d7207854952935abb3a37.scn"]
+source_file="res://assets/gltf/mannequin_final.glb"
+dest_files=["res://.godot/imported/mannequin_final.glb-10465605627e2f803974d968641fba91.scn"]
 
 [params]
 
@@ -39,7 +39,25 @@ import_script/path=""
 materials/extract=0
 materials/extract_format=0
 materials/extract_path=""
-_subresources={}
+_subresources={
+"materials": {
+"Burlap": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/burlap.tres",
+"use_external/path": "uid://dniyo6exugwvm"
+},
+"Rubber": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/rubber.tres",
+"use_external/path": "uid://df0joeagxaw27"
+},
+"Wood": {
+"use_external/enabled": true,
+"use_external/fallback_path": "res://assets/materials/wood.tres",
+"use_external/path": "uid://buww0hm65t5w"
+}
+}
+}
 gltf/naming_version=2
 gltf/embedded_image_handling=1
 gltf/texture_map_mode=1

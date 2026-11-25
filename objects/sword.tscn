@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ctqmny8e5bdjh"]
 
-[ext_resource type="PackedScene" uid="uid://chsu12qpbc4od" path="res://assets/gltf/sword.glb" id="1_74bdg"]
+[ext_resource type="PackedScene" uid="uid://012swey7qfyu" path="res://assets/gltf/sword_final.glb" id="1_1ajn3"]
 [ext_resource type="Script" uid="uid://cet8acagn853a" path="res://pickup/pickup_able_body.gd" id="1_s28hv"]
 [ext_resource type="Script" path="res://gestures/sword_fire.gd" id="2_fire"]
 
@@ -14,7 +14,7 @@ size = Vector3(0.137, 0.028, 0.137)
 height = 0.172
 radius = 0.034
 
-[node name="Sword" type="RigidBody3D" unique_id=46524695]
+[node name="sword_final" type="RigidBody3D" unique_id=46524695]
 script = ExtResource("1_s28hv")
 
 [node name="Model" parent="." instance=ExtResource("1_74bdg")]
