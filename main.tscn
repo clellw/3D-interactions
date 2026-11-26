@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://dym3ekgbygprn" path="res://xr_hand_fallback_modifier_3d.gd" id="8_gdsnk"]
 [ext_resource type="Script" uid="uid://qxqkpy1ruwrd" path="res://gestures/finger_snap_detector.gd" id="9_snap"]
 [ext_resource type="PackedScene" uid="uid://ny74d8kiffr3" path="res://objects/mannequin.tscn" id="10_4c57u"]
+[ext_resource type="Script" uid="uid://4phlv5tt20kt" path="res://gestures/fireball_clap.gd" id="10_clap"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_eyx45"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -206,6 +207,9 @@ debug_label = NodePath("../../LeftSnapInfo")
 script = ExtResource("9_snap")
 hand = 1
 debug_label = NodePath("../../RightSnapInfo")
+
+[node name="FireballClap" type="Node3D" parent="XROrigin3D" unique_id=1075679512]
+script = ExtResource("10_clap")
 
 [node name="LeftHandInfo" parent="." unique_id=1760315995 node_paths=PackedStringArray("fallback_mesh") instance=ExtResource("5_wlhtu")]
 transform = Transform3D(0.939693, -0.085635, 0.331126, 0, 0.968147, 0.25038, -0.34202, -0.23528, 0.909761, -0.713026, 0.8718, -0.809953)

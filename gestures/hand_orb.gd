@@ -147,6 +147,8 @@ var _aim_history : Array = []    # [ [time, finger direction, aim point, aim poi
 var _velocity : Vector3
 var _fly_time : float = 0.0
 var _crushed : bool = false      # crush effect already played?
+var _merging : bool = false      # being merged into a big fireball (clap)?
+var _merge_point : Vector3
 
 # Aiming state. The direction is computed in _process (from the joints), the
 # raycast that finds the aim point runs in _physics_process (physics queries
@@ -295,11 +297,24 @@ func _ready() -> void:
 
 ## True when the fireball can imbue a sword: held in a cupped hand.
 func can_imbue() -> bool:
-	return mode == Mode.CUPPED
+	return mode == Mode.CUPPED and not _merging
+
+
+## True when the fireball sits on a flat hand: ready for a clap (FireballClap).
+func is_flat() -> bool:
+	return mode == Mode.FLAT and not _merging
+
+
+## Called by FireballClap: the fireball leaves the hand, flies into `point`
+## (where the palms met), shrinks and disappears into the big fireball.
+func merge_into(point : Vector3) -> void:
+	_merging = true
+	_merge_point = point
+	_scale_goal = 0.0
 
 
 func is_attached_to_hand() -> bool:
-	return mode != Mode.FLYING and mode != Mode.ABSORBING
+	return mode != Mode.FLYING and mode != Mode.ABSORBING and not _merging
 
 
 func _process(delta : float) -> void:
@@ -312,6 +327,14 @@ func _process(delta : float) -> void:
 	if mode == Mode.FLYING:
 		# Movement happens in _physics_process (it needs raycasts).
 		_update_visual(delta)
+		return
+
+	if _merging:
+		# Fly into the clap point while shrinking (_scale_goal is 0).
+		global_position = global_position.lerp(_merge_point, 1.0 - exp(-25.0 * delta))
+		_update_visual(delta)
+		if _scale_now <= 0.001:
+			queue_free()
 		return
 
 	# 1. Read all hand joints in world space.

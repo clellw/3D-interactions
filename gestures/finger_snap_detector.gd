@@ -169,10 +169,20 @@ func has_active_orb() -> bool:
 ## while holding it must not create a fireball. The PickupHandler3D nodes
 ## register in the "pickup_handlers" group; without any, this is always false.
 func _is_hand_holding_something() -> bool:
+	# Also busy while a big fireball is held (FireballClap): the hand gestures
+	# used to hold and throw it must not create small fireballs.
+	for clap in get_tree().get_nodes_in_group(&"fireball_claps"):
+		if clap.is_busy():
+			return true
 	for handler in get_tree().get_nodes_in_group(&"pickup_handlers"):
 		if handler.get_hand_index() == hand and handler.picked_up_body:
 			return true
 	return false
+
+
+## The fireball currently on this hand, or null.
+func get_orb() -> HandOrb:
+	return _orb if has_orb_on_hand() else null
 
 
 ## True while this hand still holds an orb (not yet fired or absorbed).

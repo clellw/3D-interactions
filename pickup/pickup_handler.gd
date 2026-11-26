@@ -221,6 +221,12 @@ func get_hand_index() -> int:
 # True if the finger snap detector of our hand currently has a fireball
 # (see gestures/finger_snap_detector.gd).
 func _hand_has_orb() -> bool:
+	# A big fireball being held (FireballClap): closing the hand to raise the
+	# index must not spawn the sword either.
+	for clap in get_tree().get_nodes_in_group(&"fireball_claps"):
+		if clap.is_busy():
+			return true
+
 	var hand_index : int = get_hand_index()
 	for detector in get_tree().get_nodes_in_group(&"finger_snap_detectors"):
 		if detector.hand == hand_index and detector.has_active_orb():
